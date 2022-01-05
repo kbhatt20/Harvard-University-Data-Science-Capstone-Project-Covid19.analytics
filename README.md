@@ -1,5 +1,5 @@
 # Harvard-University-Data-Science-Capstone-Project-Covid19.analytics
-![Covid19](covid19_image.jpg)
+![Covid](covid19_image.jpg)
 
 
 It has been 2+ years that the Covid-19 pandemic has put our life and behaviors in check. This project uses the Covid-19 dataset maintained.For starting the virus is “peculiar” as not all the infected individuals experience the same symptoms. Some individuals display symptoms that are similar to the ones of a common cold or flu while other individuals experience serious symptoms that can cause death or hospitalization with different levels of severity, including staying in intensive-care units (ICU) for several weeks or even months.Elderly are the most vulnerable to the disease and reported mortality rates vary from 5 to 15% depending on the geographical location.
