@@ -1,0 +1,348 @@
+---
+title: "Use And Exploration of covid19.analytics R package for US (United States) cases and data"
+author: "Kunjal Bhatt"
+date: "1/4/2022"
+output:
+  html_document:
+    toc: yes
+    toc_depth: '4'
+    df_print: paged
+  pdf_document:
+    toc: yes
+    toc_depth: 4
+    number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Background and Motivation overview
+
+
+It has been 2+ years that the Covid-19 pandemic has put our life and behaviors in check. This project uses the Covid-19 dataset maintained.For starting the virus is “peculiar” as not all the infected individuals experience the same symptoms. Some individuals display symptoms that are similar to the ones of a common cold or flu while other individuals experience serious symptoms that can cause death or hospitalization with different levels of severity, including staying in intensive-care units (ICU) for several weeks or even months.Elderly are the most vulnerable to the disease and reported mortality rates vary from 5 to 15% depending on the geographical location.
+
+
+\pagebreak
+
+## 1. Introduction
+
+
+The number of scientific papers related to CoViD19 published since the beginning of the pandemic, the amount of data and tools developed to track the evolution of pandemic. As a matter of fact, scientists are now drowning in publications related to the CoViD19, and some collaborative and community initiatives are trying to use machine learning techniques to facilitate identify and digest the most relevant sources for a given topic.
+The “R Language and Environment for Statistical Computing” is not exception here. Moreover,promoting and based on the open source and open community principles, R has empowered scientists and researchers since its inception. Not surprisingly then, the R community has contributed to the official CRAN repository already with more than a dozen of packages related to the CoViD19 pandemic since the beginning of the crisis.
+
+
+Here we will introduce and discuss the covid19.analytics R package.which is mainly designed and focus in an open and modular approach to provide researchers quick access to the latest reported worldwide data of the CoViD19 cases, as well as, analytically and visualization tools to process this data.
+
+
+This project is related to the Choose Your Own Project Submission Project of the HarvardX: PH125.9x Data Science: Capstone course. For this project we will use different covid19 related datasets to make the latest data from the reported cases of the current CoViD19 pandemic.
+
+
+
+## 2. Aim of the project
+
+
+The "covid19.analytics" R package allows users to obtain live worldwide data from the novel Coronavirus Disease originally reported in 2019, COVID-19. One of the main goals of this package is to make the latest data about the COVID-19 pandemic promptly available to researchers and the scientific community. 
+
+The package also provides basic analysis and visualization tools and functions to investigate datasets and other ones structured in a similar fashion. The covid19.analytics package is an open source tool, which its main implementation and API is the R package. 
+
+
+
+
+## 3. Data Ingestion
+
+
+For this project the "covid19.analytics" package provides access to the following open-access data sources, One of the main objectives of the covid19.analytics package is to make the latest data from the reported cases of the current CoViD19 pandemic promptly available to researchers 
+and the scientific community In what follows we describe the main functionalities from the package regarding data accessibility. The covid19.data function allows users to obtain realtime data about the CoViD19 reported cases from the JHU’s CCSE repository, in the following modalities.
+
+aggregated data for the latest day, with a great ’granularity’ of geographical regions (ie. cities,
+provinces, states, countries)
+
+  - 2019 Novel CoronaVirus COVID-19 (2019-nCoV) Data Repository by Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE)      https://github.com/CSSEGISandData/COVID-19
+
+  - COVID-19: Status of Cases in Toronto -- City of Toronto                       
+    https://www.toronto.ca/home/covid-19/covid-19-latest-city-of-toronto-news/covid-19-status-of-cases-in-toronto/
+
+  - COVID-19: Open Data Toronto https://open.toronto.ca/dataset/covid-19-cases-in-toronto/
+
+  - COVID-19: Health Canada https://health-infobase.canada.ca/covid-19/
+
+  - Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome NCBI Reference Sequence: NC_045512.2 
+    https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2
+
+  - COVID-19 Vaccination and Testing records from "Our World In Data" (OWID) https://github.com/owid/
+
+  - Pandemics historical records from Visual Capitalist (and sources within) https://www.visualcapitalist.com/history-of-pandemics-deadliest/
+    https://www.visualcapitalist.com/the-race-to-save-lives-comparing-vaccine-development-timelines/
+    
+  - a backup data repository hosted at GitHub, https://github.com/mponce0/covid19analytics.datasets -- where replicas of the live datasets are
+    stored for redundancy and robust accesibility sake.
+    
+    
+    
+    Overview of the Main Functions from the "covid19.analytics" Package
+    Function	                                                           
+
+    covid19.data  ----> obtain live* worldwide data for 
+                        COVID-19 virus, from the JHU's CCSE repository
+                                                 
+    covid19.Toronto.data -----> obtain live* data for COVID-19 cases in the city of Toronto, ON Canada, from the City of Toronto                                                  reports--or-- Open Data Toronto
+    
+    covid19.US.data  ------->   obtain live* US specific data for COVID-19 virus, from the JHU's CCSE repository
+    
+    covid19.vaccination -----> obtain up-to-date COVID-19 vaccination records from
+    
+    covid19.testing.data -----> obtain up-to-date COVID-19 testing records from
+    
+    pandemics.data ------>   obtain pandemics and pandemics vaccination *historical* records from
+    
+    covid19.genomic.data --------->  obtain covid19's genomic sequencing data from NCBI
+    c19.refGenome.data 
+    c19.fasta.data 
+    c19.ptree.data 
+    c19.NPs.data 
+    c19.NP_fasta.data
+    
+    
+    
+    
+```{r, warning=FALSE}
+
+# First run below to load "covid19.analytics"
+# install.packages("covid19.analytics")
+# install.packages("devtools")
+# devtools::install_github("mponce0/covid19.analytics")
+
+library(covid19.analytics)
+
+# obtain covid19's genomic data
+covid19.gen.seq <- covid19.genomic.data()
+
+```
+
+
+
+## 4. Genomics Data
+
+
+Similarly to the rapid developments and updates in the reported cases of the disease, the genetic sequencing of the virus is moving almost at equal pace. That's why the covid19.analytics package provides access to a good number of the genomics data currently available.
+The covid19.genomic.data() function allows users to obtain the COVID-19's genomics data from NCBI's databases.
+
+
+Although the package attempts to provide the latest available genomic data, there are a few important details and differences with respect to the reported cases data. For starting, the amount of genomic information available is way larger than the data reporting the number of cases which adds some additional constraints when retrieving this data. In addition to that, the hosting servers for the genomic databases impose certain limits on the rate and amounts of downloads. 
+
+In order to mitigate these factors, the covid19.analytics package employs a couple of different strategies as summarized below:
+
+most of the data will be attempted to be retrieved live from NCBI databases -- same as using src='livedata'
+if that is not possible, the package keeps a local version of some of the largest datasets (i.e. genomes, nucleotides and proteins) which might not be up-to-date -- same as using src='repo'.
+the package will attempt to obtain the data from a mirror server with the datasets updated on a regular basis but not necessarily with the latest updates -- same as using src='local'.
+
+
+
+
+
+# Methods and Analysis
+
+The report.summary() generates an overall report summarizing the different datasets. It can summarize the "Time Series" data (cases.to.process="TS"), the "aggregated" data (cases.to.process="AGG") or both (cases.to.process="ALL"). It will display the top 10 entries in each category, or the number indicated in the Nentries argument, for displaying all the records set Nentries=0.
+
+
+
+
+## 1. Total per country (US) - Reports
+
+The below figures show the total number of cases for United States (US) one the upper plot in log-scale with a linear fit to an exponential law and in linear scale in the bottom panel. Details about the models are included in the plot, in particular the growth rate which in several cases appears to be around 1.01+ which means the dispersion of the virus has reache its exponential growth.
+
+```{r, warning=FALSE, message=FALSE, results = FALSE}
+
+covid19.confirmed.cases <- covid19.data("ts-confirmed")
+
+# total for confirmed cases for "US"
+tots.per.location(covid19.confirmed.cases,geo.loc="US")
+
+```
+
+
+
+## 2. Time Series - Confirmed US death and US Confirmed Growth Rate Cases - Reports
+
+The function can also target specific geographical location(s) using the geo.loc argument. When a geographical location is indicated, the report will include an additional "Rel.Perc" column for the confirmed cases indicating the relative percentage among the locations indicated. Similarly the totals displayed at the end of the report will be for the selected locations.
+
+In each case ("TS" or/and "AGG") will present tables ordered by the different cases included, i.e. confirmed infected, deaths, recovered and active cases.
+
+The dates when the report is generated and the date of the recorded data will be included at the beginning of each table.
+
+It will also compute the totals, averages, standard deviations and percentages of various quantities:
+
+it will determine the number of unique locations processed within the dataset
+
+it will compute the total number of cases per case
+
+Percentages: percentages are computed as follow:
+
+for the "Confirmed" cases, as the ratio between the corresponding number of cases and the total number of cases, i.e. a sort of "global percentage" indicating the percentage of infected cases wrt the rest of the world
+
+for "Confirmed" cases, when geographical locations are specified, a "Relative percentage" is given as the ratio of the confirmed cases over the total of the selected locations
+
+for the other categories, "Deaths"/"Recovered"/"Active", the percentage of a given category is computed as the ratio between the number of cases in the corresponding category divided by the "Confirmed" number of cases, i.e. a relative percentage with respect to the number of confirmed infected cases in the given region
+
+For "Time Series" data:
+
+it will show the delta (change or variation) in the last day, daily changes day before that (t-2), three days ago (t-3), a week ago (t-7), two weeks ago (t-14) and a month ago (t-30)
+when possible, it will also display the percentage of "Recovered" and "Deaths" with respect to the "Confirmed" number of cases
+The column "GlobalPerc" is computed as the ratio between the number of cases for a given country over the total of cases reported
+The "Global Perc. Average (SD: standard deviation)" is computed as the average (standard deviation) of the number of cases among all the records in the data
+The "Global Perc. Average (SD: standard deviation) in top X" is computed as the average (standard deviation) of the number of cases among the top X records
+Typical structure of a summary.report() output for the Time Series data:
+
+
+```{r, warning=FALSE, message=FALSE}
+
+# retrieve US time series data of total death cases
+ US.deaths.cases <- covid19.data("ts-deaths-US")
+
+```
+The below figures show on the upper panel the number of changes on a daily basis in linear scale (thin line, left y-axis) and log scale (thicker line, right y-axis), while the bottom panel displays the growth rate for the US.
+
+```{r, warning=FALSE, message=FALSE}
+# read time series data for confirmed cases
+TS.data <- covid19.data("ts-confirmed")
+
+# compute changes and growth rates per location for US
+growth.rate(TS.data,geo.loc=c("US"))
+
+
+```
+
+
+
+## 3. Trend - US Confirmed, US Recovered, US Deaths & US Active Cases - Graph
+
+It is possible to estimate the global trends per location employing the functions single.trend, mtrends and itrends. The first two functions generate static plots of different quantities that can be used as indicators, while the third function generates an interactive representation of a normalized a-dimensional trend, below graph show the the single trend for US location on covid confirmed cases over time period.
+
+single.trend graph - compose of static plots: total number of cases vs time, daily changes vs total changes in different representations.
+
+```{r, warning=FALSE, message=FALSE}
+ts.data <- covid19.data("ts-confirmed")
+
+# Single location trend, in this case using the data for US
+single.trend(ts.data[ ts.data$Country.Region=="US",])
+
+```
+
+
+
+## 4. Visualization - Interactive & Static Plot
+
+plots in a static and interactive plot total number of cases per day, the user can specify multiple locations or global totals. Plotting Totals. The function totals.plt will generate plots of the total number of cases as a function of time. It can be used for the total data or for a specific or multiple locations. The function can generate static plots and/or interactive ones, as well, as linear and/or semi-log plots.
+
+Plotting Cases in the US (United States). The function live.map will display the different cases in each corresponding location all around the US (United States) in an interactive map of the world. It can be used with time series data of the US. In particular the live.map function is an utility function which allows to plot the location of the recorded cases around the world. This function in particular allows for several
+customizable features, such as, the type of projection used in the map or to select different types of projection operators in a pull down menu, displaying or not the legend of the regions, specify re scaling factors for the sizes representing the number of cases, among others. The function will generate a live representation of the cases, utilizing the plotly package and ultimately open the map in a browser, where the user can explore the map, drag the representation, zoom in/out, turn on/off legends, etc
+
+```{r, warning=FALSE, message=FALSE}
+# retrieve time series data
+TS.data <- covid19.data("ts-ALL")
+
+# static and interactive plot 
+totals.plt(TS.data)
+
+```
+
+\pagebreak
+
+```{r, warning=FALSE, message=FALSE}
+# retrieve interactive map of the time series data of the US confirmed cases datas spatial resolution.
+live.map(covid19.data("ts-confirmed-US"))
+
+```
+
+
+
+
+# Modeling of COVID 19 Virus Spread
+
+## 1. SIR Model for U.S
+Important features added by the covid19.analytics package, is the ability of model the spread of the virus by incorporating real data. As described in below figure. generate.SIR.model function, implements a simple SIR model employing the data reported from an specified dataset and a particular location. Examples of this are shown in The generate.SIR.model function is complemented with the plt.SIR.model function which can be used to generate static or interactive figures as shown in below.
+
+```{r, warning=FALSE, message=FALSE}
+
+# read time series data for confirmed cases
+data <- covid19.data("ts-confirmed")
+
+# run a SIR model for a US geographical location
+generate.SIR.model(data,"US", t0=1,t1=15)
+
+```
+
+
+## 2. SweepSIR Model for U.S
+
+
+Below shows an example of the generation of a sequence of values for R0, and actually any of the parameteres (β, γ) describing the SIR model. In this case, the function takes a range of values for the initial date t0 and generates different date intervals, this allows the function to generate multiple SIR models and return the corresponding parameters for each  model.
+
+
+```{r, warning=FALSE, message=FALSE}
+# read TimeSeries data
+TS.data <- covid19.data("TS-confirmed")
+
+# select a location of interest, eg. US
+US.data <- TS.data[ (TS.data$Country.Region == "US") & (TS.data$Province.State == ""),]
+
+# sweep values of R0 based on range of dates to consider for the model
+ranges <- 15:25
+deltaT <- 35
+params_sweep <- sweep.SIR.models(data=US.data,geo.loc="US", t0_range=ranges, deltaT=deltaT)
+
+# the parameters --beta,gamma,R0-- are returned in a "matrix" "array" object
+print(params_sweep)
+#       [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]    
+# beta  0.5231031 0.5250777 0.5323438 0.5217565 0.5355503 0.5473388 0.559132
+# gamma 0.4768969 0.4749223 0.4676562 0.4782435 0.4644497 0.4526611 0.440868
+# R0    1.096889  1.105608  1.138323  1.090985  1.153086  1.209158  1.268253
+#       [,8]      [,9]      [,10]     [,11]   
+# beta  0.5668948 0.5753911 0.5835743 0.592407
+# gamma 0.4331052 0.4246089 0.4164257 0.407593
+# R0    1.308908  1.355108  1.401389  1.453428
+
+# obtain the R0 values from the parameters
+R0s <- unlist(params_sweep["R0",])
+# nbr of infected cases
+US.infs<- preProcessingData(US.data,"US")
+
+# average per range
+# define ranges
+lst.ranges <- lapply(ranges, function(x) x:(x+deltaT))
+
+# compute averages
+avg.US.infs <- lapply(lst.ranges, function(x) mean(US.infs[x]))
+
+# plots
+plot(R0s, type='b')
+# plot vs average number of infected cases
+plot(avg.US.infs, R0s, type='b')
+
+
+```
+
+
+\pagebreak
+
+# Results
+
+**1. SIR Model for U.S:** The generate.SIR.model function will attempt to obtain proper values for the parameters β and γ, by inferring the onset of the epidemic using the actual data. This is also listed in the output of the function, and it can be controlled by setting the parameters t0 and t1 or deltaT, which are used to specify the range of dates to be considered for using when determining the values of β and γ. The fatality rate (constant) can also be indicated via the fatality.rate argument, as well, as the total population of the region with tot.population.
+
+
+**2. SweepSIR Model for U.S:** The results are then bundle in a "matrix"/"array" object which can be accessed by column for each model or by row for each parameter sets.
+
+
+
+
+
+# Conclusion
+
+The “covid19.analytics” R package allows users to obtain live* worldwide data from the novel Coronavirus Disease originally reported in 2019, COVID-19. One of the main goals of this package is to make the latest data about the COVID-19 pandemic promptly available to researchers and the scientific community. The “covid19.analytics” package also provides basic analysis tools and functions to investigate these datasets, which are being used and demonstrated in above project work with its description and several usages.
+
+
+
+**Reference:** Ponce et al., (2021). covid19.analytics: An R Package to Obtain, Analyze and Visualize Data from the 2019 Coronavirus Disease Pandemic. Journal of Open Source Software, 6(59), 2995. https://doi.org/10.21105/joss.02995
